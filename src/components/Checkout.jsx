@@ -40,7 +40,7 @@ const Checkout = () => {
       const { orderId, amount: orderAmount } = orderResponse.data;
 
       const options = {
-        key: process.env.Razorpay_key_id,
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
         amount: orderAmount * 100,
         currency: 'INR',
         name: 'CheckMart',
