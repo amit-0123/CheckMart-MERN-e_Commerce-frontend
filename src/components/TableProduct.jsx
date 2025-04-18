@@ -1,111 +1,92 @@
+
 import React, { useContext, useEffect, useState } from 'react'
 import AppContext from '../context/AppContext'
 
-
 const TableProduct = ({ cart }) => {
+  const { decreaseQty, addToCart, removeProduct, clearCart } = useContext(AppContext)
+  const [qty, setQty] = useState(0)
+  const [price, setPrice] = useState(0)
 
-    const { decreaseQty, addToCart, removeProduct, clearCart } = useContext(AppContext)
-    const [qty, setQty] = useState(0)
-    const [price, setPrice] = useState(0)
+  useEffect(() => {
+    let qty = 0;
+    let price = 0;
+    if (cart?.items) {
+      for (let i = 0; i < cart?.items?.length; i++) {
+        qty += cart.items[i].qty
+        price += cart.items[i].price
+      }
+      setPrice(price);
+      setQty(qty);
+    }
+  }, [cart])
 
+  return (
+    <div className="overflow-x-auto rounded shadow-md">
+      <table className="min-w-full text-sm text-center text-black bg-white">
+        <thead className="bg-green-800 text-white">
+          <tr>
+            <th className="px-4 py-2">Image</th>
+            <th className="px-4 py-2">Title</th>
+            <th className="py-2">(₹) Price </th>
+            <th className="px-4 py-2">Qty</th>
+            <th className="px-4 py-2">+</th>
+            <th className="px-4 py-2">-</th>
+            <th className="px-4 py-2">Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          {cart?.items?.map((product) => (
+            <tr key={product._id} className="border-t border-gray-700 border-1">
+              <td className="p-2">
+                <img src={product.imageSrc} alt={product.title} className="w-12 h-12 rounded mx-auto" />
+              </td>
+              <td className="p-2">{product.title}</td>
+              <td className="p-2">{product.price} ₹</td>
+              <td className="p-2">{product.qty}</td>
+              <td className="p-2">
+                <button
+                  className="text-green-500 hover:text-green-300"
+                  onClick={() =>
+                    addToCart(product?.productId, product.title, product.price / product.qty, 1, product.imageSrc)
+                  }
+                >
+                  ➕
+                </button>
+              </td>
+              <td className="p-2">
+                <button
+                  className="text-yellow-500 hover:text-yellow-300"
+                  onClick={() => decreaseQty(product?.productId, 1)}
+                >
+                  ➖
+                </button>
+              </td>
+              <td className="p-2">
+                <button
+                  className="text-red-500 hover:text-red-300"
+                  onClick={() => {
+                    if (confirm('Are you sure you want to remove this item?')) {
+                      removeProduct(product?.productId)
+                    }
+                  }}
+                >
+                  🗑️
+                </button>
+              </td>
+            </tr>
+          ))}
 
-    useEffect(() => {
-        let qty = 0;
-        let price = 0;
-        if (cart?.items) {
-            for (let i = 0; i < cart?.items?.length; i++) {
-                qty += cart.items[i].qty
-                price += cart.items[i].price
-            }
-            setPrice(price);
-            setQty(qty);
-        }
-    }, [cart])
-
-
-
-    return (
-        <>
-            <table className="table table-bordered border-primary bg-dark text-center">
-                <thead>
-                    <tr>
-                        <th scope="col" className='bg-dark text-light'>Product Img</th>
-                        <th scope="col" className='bg-dark text-light'>title</th>
-                        <th scope="col" className='bg-dark text-light'>Price</th>
-                        <th scope="col" className='bg-dark text-light'>Qty</th>
-                        <th scope="col" className='bg-dark text-light'>Qty++</th>
-                        <th scope="col" className='bg-dark text-light'>Qty--</th>
-                        <th scope="col" className='bg-dark text-light'>Remove</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                    {cart?.items?.map((product) =>
-                        <tr key={product._id}>
-                            <th scope="row" className='bg-dark text-light'>
-                                <img src={product.imageSrc} style={{ width: '50px', height: '50px' }} />
-                            </th>
-                            <td className='bg-dark text-light'>
-                                {product.title}
-                            </td>
-                            <td className='bg-dark text-light'>
-                                {product.price}{" "}{"₹"}
-                            </td>
-                            <td className='bg-dark text-light'>
-                                {product.qty}
-                            </td>
-                            <td className='bg-dark text-light'><span className="material-symbols-outlined" onClick={() => addToCart(
-                                product?.productId,
-                                product.title,
-                                product.price / product.qty,
-                                1,
-                                product.imageSrc
-                            )} style={{cursor:'pointer'}}>
-                                add_circle
-                            </span>
-                            </td>
-                            <td className='bg-dark text-light'><span className="material-symbols-outlined" onClick={() => decreaseQty(product?.productId, 1)} style={{cursor:'pointer'}}>
-                                do_not_disturb_on
-                            </span>
-                            </td>
-                            <td className='bg-dark text-light'><span className="material-symbols-outlined " onClick={() => {
-                                if (confirm("Are you sure, want to remove from cart...?")) {
-                                    removeProduct(product?.productId)
-                                }
-                            }}  style={{cursor:'pointer'}}>
-                                delete
-                            </span>
-                            </td>
-                        </tr>
-                    )}
-
-                    <tr >
-                        <th scope="row" className='bg-dark text-light'>
-
-                        </th>
-
-                        <td className='bg-dark text-light'>{" "}
-                            <button className='btn btn-primary' style={{ fontWeight: 'bold' }}>total</button>{" "}
-                        </td>
-                        <td className='bg-dark text-light'>
-                            {" "}
-                            <button className='btn btn-warning' style={{ fontWeight: 'bold' }}>{price}{" "}{"₹"}</button>
-                        </td>
-                        <td className='bg-dark text-light'>
-                            <button className='btn btn-info' style={{ fontWeight: 'bold' }}>{qty}</button>
-                        </td>
-                        <td className='bg-dark text-light'>
-                        </td>
-                        <td className='bg-dark text-light'>
-                        </td>
-                        <td className='bg-dark text-light'>
-                        </td>
-                    </tr>
-
-                </tbody>
-            </table>
-        </>
-    )
+          <tr className="border-t-2 border-gray-600 font-bold">
+            <td></td>
+            <td className="py-3">Total</td>
+            <td className="text-black-300">₹ {price} </td>
+            <td className="text-black-300">{qty}</td>
+            <td colSpan={3}></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  )
 }
 
 export default TableProduct

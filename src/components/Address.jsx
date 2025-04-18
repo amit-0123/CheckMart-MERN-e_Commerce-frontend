@@ -1,23 +1,16 @@
-import React, { useContext } from 'react'
-// import { Link } from 'react-router-dom'
-import { useState } from 'react'
+
+import React, { useContext, useState } from 'react'
 import AppContext from '../context/AppContext'
 import { useNavigate } from 'react-router-dom'
-useNavigate
 import { ToastContainer, toast, Bounce } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Address = () => {
-  const { shippingAddress,userAddress } = useContext(AppContext)
+  const { shippingAddress, userAddress } = useContext(AppContext)
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    fullName:"",
-    address:"",
-    city:"",
-    state:"",
-    country:"",
-    pincode:"",
-    phoneNumber:""
+    fullName: "", address: "", city: "", state: "",
+    country: "", pincode: "", phoneNumber: ""
   })
 
   const onChangeHandler = (e) => {
@@ -25,107 +18,96 @@ const Address = () => {
     setFormData({ ...formData, [name]: value });
   }
 
-   // destructuring data 
-  const { fullName,address,city,state,country,pincode,phoneNumber } = formData;
-
   const submitHandler = async (e) => {
-    e.preventDefault();
-
-    // if (!fullName || !address || !city || !state || !country || !pincode || !phoneNumber ) {
-    //   toast.error("All fields are required!", {
-    //     position: "top-right",
-    //     autoClose: 2000,
-    //     hideProgressBar: false,
-    //     closeOnClick: true,
-    //     pauseOnHover: true,
-    //     draggable: true,
-    //     progress: undefined,
-    //     theme: "dark",
-    //     transition: Bounce,
-    //   });
-    //   return;
-    // }
-    
-    const result = await shippingAddress (fullName,address,city,state,country,pincode,phoneNumber);
-
-    if (result.success) {
-      navigate('/checkout');
-    }
-
-    setFormData({
-      fullName:"",
-      address:"",
-      city:"",
-      state:"",
-      country:"",
-      pincode:"",
-      phoneNumber:""
-    })
-    console.log(formData) 
+    e.preventDefault()
+    const result = await shippingAddress(
+      formData.fullName, formData.address, formData.city,
+      formData.state, formData.country, formData.pincode, formData.phoneNumber
+    )
+    if (result.success) navigate('/checkout')
+    setFormData({ fullName: "", address: "", city: "", state: "", country: "", pincode: "", phoneNumber: "" })
   }
+
   return (
-    <>
-      <div className="container my-5 p-5" style={{ border: "2px solid yellow", borderRadius: "10px" }} >
-        <h1 className='text-center'>Shipping Address</h1>
-        <form onSubmit={submitHandler}
-          className='my-3'>
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-10">
+      <div className="w-full max-w-4xl bg-white rounded-2xl shadow-xl p-8 md:p-10">
+        <h1 className="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-6">🚚 Shipping Address</h1>
 
-         <div className="row">
-         <div className="mb-3 col-md-4">
-            <label htmlFor="exampleInputEmail1" className="form-label">FullName</label>
-            <input name="fullName" value={formData.fullName} onChange={onChangeHandler} type="text" className="form-control bg-dark text-light" id="exampleInputEmail3" aria-describedby="emailHelp" />
+        <form onSubmit={submitHandler} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-semibold text-gray-700">Full Name</label>
+              <input type="text" name="fullName" value={formData.fullName}
+                onChange={onChangeHandler}
+                className="mt-1 block w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700">Country</label>
+              <input type="text" name="country" value={formData.country}
+                onChange={onChangeHandler}
+                className="mt-1 block w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700">State</label>
+              <input type="text" name="state" value={formData.state}
+                onChange={onChangeHandler}
+                className="mt-1 block w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+              />
+            </div>
           </div>
 
-          <div className="mb-3 col-md-4">
-            <label htmlFor="exampleInputEmail1" className="form-label">Country</label>
-            <input name="country" value={formData.country} onChange={onChangeHandler} type="text" className="form-control bg-dark text-light" id="exampleInputEmail1" aria-describedby="emailHelp" autoComplete="current-password" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-semibold text-gray-700">City</label>
+              <input type="text" name="city" value={formData.city}
+                onChange={onChangeHandler}
+                className="mt-1 block w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700">Pincode</label>
+              <input type="number" name="pincode" value={formData.pincode}
+                onChange={onChangeHandler}
+                className="mt-1 block w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700">Phone Number</label>
+              <input type="number" name="phoneNumber" value={formData.phoneNumber}
+                onChange={onChangeHandler}
+                className="mt-1 block w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+              />
+            </div>
           </div>
 
-          <div className="mb-3 col-md-4">
-            <label htmlFor="exampleInputPassword1" className="form-label">State</label>
-            <input name="state" value={formData.state} onChange={onChangeHandler} type="text" className="form-control bg-dark text-light" id="exampleInputPassword1" autoComplete="current-password" />
-          </div>
-         </div>
-
-         <div className="row">
-         <div className="mb-3 col-md-4">
-            <label htmlFor="exampleInputEmail1" className="form-label">City</label>
-            <input name="city" value={formData.city} onChange={onChangeHandler} type="text" className="form-control bg-dark text-light" id="exampleInputEmail3" aria-describedby="emailHelp" />
+          <div>
+            <label className="block text-sm font-semibold text-gray-700">Address Line / Nearby</label>
+            <textarea name="address" value={formData.address} onChange={onChangeHandler}
+              className="mt-1 block w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+              rows={3}
+            ></textarea>
           </div>
 
-          <div className="mb-3 col-md-4">
-            <label htmlFor="exampleInputEmail1" className="form-label">Pincode</label>
-            <input name="pincode" value={formData.pincode} onChange={onChangeHandler} type="number" className="form-control bg-dark text-light" id="exampleInputEmail1" aria-describedby="emailHelp" autoComplete="current-password" />
-          </div>
+          <div className="flex flex-col sm:flex-row justify-center gap-4 mt-6">
+            <button type="submit"
+              className="bg-green-600 text-white font-bold uppercase px-6 py-3 !rounded-md hover:bg-white hover:!text-green-600 border-2 border-green-600 transition-all duration-300">
+              Submit
+            </button>
 
-          <div className="mb-3 col-md-4">
-            <label htmlFor="exampleInputPassword1" className="form-label">Phone Number</label>
-            <input name="phoneNumber" value={formData.phoneNumber} onChange={onChangeHandler} type="number" className="form-control bg-dark text-light" id="exampleInputPassword1" autoComplete="current-password" />
+            {userAddress && (
+              <button type="button" onClick={() => navigate('/checkout')}
+                className="bg-yellow-500 text-white font-bold uppercase px-6 py-3 !rounded-md hover:bg-white hover:!text-yellow-600 border-2 border-yellow-500 transition-all duration-300">
+                Use Old Address
+              </button>
+            )}
           </div>
-         </div>
-
-       <div className="row">
-       <div className="mb-3">
-            <label htmlFor="exampleInputPassword1" className="form-label">AddressLine/Nearby</label>
-            <textarea name="address" value={formData.address} onChange={onChangeHandler} type="text" className="form-control bg-dark text-light" id="exampleInputPassword1" autoComplete="current-password" />
-          </div>
-       </div>
-
-          <div className="d-grid col-6 mx-auto my-3">
-            <button type="submit" className="btn btn-primary" style={{fontWeight:'bold'}}>Submit</button>
-          </div>
-
-          {userAddress && (
-             <div className="d-grid col-6 mx-auto my-3">
-             <button type="submit" className="btn btn-warning" onClick={()=>navigate('/checkout')} style={{fontWeight:'bold'}}>Use Old Address</button>
-           </div>
-          )}
-         
         </form>
       </div>
-    </>
 
-    // <div>Register</div>
+      <ToastContainer />
+    </div>
   )
 }
 

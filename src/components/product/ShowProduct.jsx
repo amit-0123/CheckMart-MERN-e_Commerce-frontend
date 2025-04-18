@@ -1,58 +1,44 @@
-
 import React, { useContext } from 'react'
 import AppContext from '../../context/AppContext'
 import { Link } from 'react-router-dom'
-// import Slider from '../Slider'
+// import FilterSidebar from './FilterSidebar'
 
 const ShowProduct = () => {
+  const { filteredData, addToCart } = useContext(AppContext)
 
-  const { products, filteredData, addToCart } = useContext(AppContext)
   return (
-    <div className="container my-5"> {/* Wrap everything in a Bootstrap container */}
-      
-      {/* <div>
-        <Slider />
-      </div> */}
-      
-      <div className="row g-5"> {/* Add a gap of 5 between cards */}
-        {filteredData?.map((product) => (
-          <div key={product._id} className="col-md-3 d-flex justify-content-center"> {/* 4 cards per row */}
-            <div className="card bg-dark text-light text-center d-flex flex-column" style={{ width: '18rem', height: '100%' }}>
-              <Link to={`/product/${product._id}`} className="d-flex justify-content-center align-items-center p-3">
-                <img
-                  src={product.imageSrc}
-                  className="card-img-top"
-                  alt={product.title}
-                  style={{
-                    width: "200px",
-                    height: "200px",
-                    borderRadius: "10px",
-                    border: "2px solid yellow",
-                  }}
-                />
-              </Link>
-              <div className="card-body d-flex flex-column">
-                <h5 className="card-title">{product.title}</h5>
-                <p className="card-text">{product.description}</p>
+    <div className="max-w-7xl mx-auto px-4 py-8">
 
-                {/* Push the buttons to the bottom */}
-                <div className="mt-auto my-3 d-flex justify-content-center">
-                  <button className="btn btn-primary mx-3">{product.price} ₹</button>
-                  <button
-                    className="btn btn-warning"
-                    onClick={() => addToCart(
-                      product._id,
-                      product.title,
-                      product.price,
-                      1,
-                      product.imageSrc
-                    )}
-                    style={{ fontWeight: 'bold' }}
-                  >
-                    Add to cart
-                  </button>
-                </div>
-              </div>
+   {/* <FilterSidebar /> */}
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {filteredData?.map((product) => (
+          <div key={product._id} className="bg-gray-800 text-white rounded-lg shadow-lg flex flex-col justify-between p-4">
+            <Link to={`/product/${product._id}`}>
+              <img
+                src={product.imageSrc}
+                alt={product.title}
+                className="w-full h-48  border-2 border-yellow-500 rounded"
+              />
+            </Link>
+            <div className="mt-4">
+            <Link to={`/product/${product._id}`} className='!no-underline'>
+              
+              <h2 className="text-lg font-bold text-white ">{product.title}</h2>
+
+            </Link>
+              <p className="text-sm">{product.description}</p>
+            </div>
+            <div className="flex justify-between items-center mt-4">
+              <span className="text-yellow-400 font-bold">{product.price} ₹</span>
+              <button
+                className="bg-yellow-500 text-black font-bold py-1 px-3 rounded hover:bg-yellow-400"
+                onClick={() =>
+                  addToCart(product._id, product.title, product.price, 1, product.imageSrc)
+                }
+              >
+                Add to Cart
+              </button>
             </div>
           </div>
         ))}
@@ -62,5 +48,4 @@ const ShowProduct = () => {
 }
 
 export default ShowProduct
-
 

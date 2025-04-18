@@ -1,82 +1,73 @@
-import React, { useEffect, useState } from 'react'
 
-
+import React, { useEffect, useState } from 'react';
 
 const ShowOrderProduct = ({ items }) => {
+  const [qty, setQty] = useState(0);
+  const [price, setPrice] = useState(0);
 
-    const [qty, setQty] = useState(0)
-    const [price, setPrice] = useState(0)
+  useEffect(() => {
+    let qty = 0;
+    let price = 0;
+    if (items) {
+      for (let i = 0; i < items.length; i++) {
+        qty += items[i].qty;
+        price += items[i].price;
+      }
+      setPrice(price);
+      setQty(qty);
+    }
+  }, [items]);
 
+  return (
+    <div className="overflow-x-auto">
+      <table className="min-w-full bg-white text-sm text-gray-700 border border-gray-200 rounded-lg shadow-sm">
+        <thead className="bg-green-600 text-white">
+          <tr>
+            <th className="py-2 px-4 text-left">Product Img</th>
+            <th className="py-2 px-4 text-left">Title</th>
+            <th className="py-2 px-4 text-left">Price</th>
+            <th className="py-2 px-4 text-left">Qty</th>
+          </tr>
+        </thead>
+        <tbody>
+          {items?.map((product) => (
+            <tr key={product._id} className="border-t border-gray-200">
+              <td className="py-2 px-4">
+                <img
+                  src={product.imageSrc}
+                  alt="product"
+                  className="w-12 h-12 object-cover rounded-md border"
+                />
+              </td>
+              <td className="py-2 px-4">{product.title}</td>
+              <td className="py-2 px-2">₹ {product.price}</td>
+              <td className="py-2 px-4">{product.qty}</td>
+            </tr>
+          ))}
 
-    useEffect(() => {
-        let qty = 0;
-        let price = 0;
-        if (items) {
-            for (let i = 0; i < items?.length; i++) {
-                qty += items[i].qty
-                price += items[i].price
-            }
-            setPrice(price);
-            setQty(qty);
-        }
-    }, [items])
+          {/* Totals */}
+          <tr className="border-t border-gray-300 bg-gray-50 font-semibold">
+            <td className="py-2 px-4"></td>
+            <td className="py-2 px-4">
+              <p3 className="text-black">
+                Total
+              </p3>
+            </td>
+            <td className="py-2 px-2">
+              <p3 className="text-black">
+              ₹ {price} 
+              </p3>
+            </td>
+            <td className="py-2 px-4">
+              <p3 className="text-black">
+                {qty}
+              </p3>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
+};
 
-
-
-    return (
-        <>
-            <table className="table table-bordered border-primary bg-dark text-center">
-                <thead>
-                    <tr>
-                        <th scope="col" className='bg-dark text-light'>Product Img</th>
-                        <th scope="col" className='bg-dark text-light'>title</th>
-                        <th scope="col" className='bg-dark text-light'>Price</th>
-                        <th scope="col" className='bg-dark text-light'>Qty</th>
-                       
-                    </tr>
-                </thead>
-                <tbody>
-
-                    {items?.map((product) =>
-                        <tr key={product._id}>
-                            <th scope="row" className='bg-dark text-light'>
-                                <img src={product.imageSrc} style={{ width: '50px', height: '50px' }} />
-                            </th>
-                            <td className='bg-dark text-light'>
-                                {product.title}
-                            </td>
-                            <td className='bg-dark text-light'>
-                                {product.price}{" "}{"₹"}
-                            </td>
-                            <td className='bg-dark text-light'>
-                                {product.qty}
-                            </td>
-                           
-                        </tr>
-                    )}
-
-                    <tr >
-                        <th scope="row" className='bg-dark text-light'>
-
-                        </th>
-
-                        <td className='bg-dark text-light'>{" "}
-                            <button className='btn btn-primary' style={{ fontWeight: 'bold' }}>total</button>{" "}
-                        </td>
-                        <td className='bg-dark text-light'>
-                            {" "}
-                            <button className='btn btn-warning' style={{ fontWeight: 'bold' }}>{price}{" "}{"₹"}</button>
-                        </td>
-                        <td className='bg-dark text-light'>
-                            <button className='btn btn-info' style={{ fontWeight: 'bold' }}>{qty}</button>
-                        </td>
-                       
-                    </tr>
-
-                </tbody>
-            </table>
-        </>
-    )
-}
-
-export default ShowOrderProduct
+export default ShowOrderProduct;

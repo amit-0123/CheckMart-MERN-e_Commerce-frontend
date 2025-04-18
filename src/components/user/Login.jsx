@@ -47,22 +47,51 @@ const Login =  () => {
   return (
     <>
       <div className="container my-5 p-5" style={{ width: "500px", border: "2px solid yellow", borderRadius: "10px" }} >
-        <h1 className='text-center'>User Login</h1>
-        <form onSubmit={submitHandler}
-        className='my-3'>
+        <h1 className="text-2xl font-bold text-left text-gray-800 !mb-10">Login to Your Account</h1>
 
-          <div className="mb-3">
-            <label htmlFor="exampleInputEmail1" className="form-label">Email</label>
-            <input name="email" value={formData.email} onChange={onChangeHandler}  type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" autoComplete="current-password"/>
-          </div>
-          <div className="mb-3">
-            <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
-            <input name="password" value={formData.password} onChange={onChangeHandler}  type="password" className="form-control" id="exampleInputPassword1" autoComplete="current-password" />
-          </div>
-          <div className="d-grid col-6 mx-auto my-3">
-          <button type="submit" className="btn btn-primary">Login</button>
-          </div>
-        </form>
+        <form onSubmit={submitHandler} className="space-y-4">
+  {/* Email */}
+  <div className="relative">
+    <label className="absolute left-3 -top-2 text-sm text-purple-700 bg-white px-1">
+      Email <span className="text-red-500">*</span>
+    </label>
+    <input
+      type="email"
+      name="email"
+      value={formData.email}
+      onChange={onChangeHandler}
+      required
+      placeholder="Enter your email"
+      className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+    />
+  </div>
+
+  {/* Password */}
+  <div className="relative">
+    <label className="absolute left-3 -top-2 text-sm text-purple-700 bg-white px-1">
+      Password <span className="text-red-500">*</span>
+    </label>
+    <input
+      type="password"
+      name="password"
+      value={formData.password}
+      onChange={onChangeHandler}
+      required
+      placeholder="Enter password"
+      className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+    />
+  </div>
+
+  {/* Submit */}
+  <button
+    type="submit"
+    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-lg transition duration-200 cursor-pointer"
+  >
+    Login
+  </button>
+</form>
+
+
       </div>
     </>
 
